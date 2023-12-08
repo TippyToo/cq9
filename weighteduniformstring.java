@@ -24,21 +24,23 @@ class Result {
         public static List<String> weightedUniformStrings(String s, List<Integer> queries) {
     // Write your code here
     List<String> uniformStrings = new LinkedList<String>();
-    Set<Integer> weights = new HashSet<Integer>();
-    char prevChar = 0;
-    int currentWeight = weightOf(s.charAt(0));
+    Set<Long> weights = new HashSet<Long>();
+    char prevChar = s.charAt(0);
+    long currentWeight = 0;
     for (int i = 0; i < s.length(); i++) {
         char c = s.charAt(i);
+        if (!weights.contains(currentWeight)) weights.add(weightOf(c));
         if (c != prevChar) {
-            weights.add(currentWeight);
+            if (!weights.contains(currentWeight)) weights.add(currentWeight);
             currentWeight = 0;
         }
         currentWeight += weightOf(c);
         prevChar = c;   
-        if (i == s.length() - 1) weights.add(currentWeight);
+        // if (i == s.length() - 1) weights.add(currentWeight);
     }
-    for (int q : queries) {
-        if (weights.contains(q)) uniformStrings.add("Yes");
+    for (int i = 0; i < queries.size(); i++) {
+        int q = queries.get(i);
+        if (weights.contains((long) q)) uniformStrings.add("Yes");
         else uniformStrings.add("No");
     }
     // for (int weight : weights) uniformStrings.add(Integer.toString(weight));
@@ -46,7 +48,7 @@ class Result {
     }
 
 
-    private static int weightOf(char c) {
+    private static long weightOf(char c) {
         return c - 96;
     }
 
